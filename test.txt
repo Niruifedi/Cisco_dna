@@ -1,0 +1,20 @@
+{'response': [{'description': 'Cisco IOS Software [Gibraltar], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 16.11.1c, RELEASE SOFTWARE (fc3) Technical Support: http://www.cisco.com/techsupport Copyright (c) 1986-2019 by Cisco Systems, Inc. Compiled Tue 18-Jun-19 21:21 by mcpre', 'family': 'Switches and Hubs', 'lastUpdateTime': 1680317123097, 'macAddress': '68:ca:e4:37:8d:80', 'deviceSupportLevel': 'Supported', 'softwareType': 'IOS-XE', 'softwareVersion': '16.11.1c', 'serialNumber': 'FCW2211G0MA', 'managementState': 'Managed', 'inventoryStatusDetail': '<status><general code="DEV_UNREACHED"/></status>', 'collectionInterval': 'Global Default', 'upTime': '456 days, 0:59:30.42', 'lastUpdated': '2023-04-01 02:45:23', 'roleSource': 'AUTO', 'bootDateTime': '2021-12-31 01:46:23', 'apManagerInterfaceIp': '', 'collectionStatus': 'Partial Collection Failure', 'hostname': 'leaf2.abc.inc', 'locationName': None, 'managementIpAddress': '10.10.20.82', 'platformId': 'C9300-24U', 'reachabilityFailureReason': 'SNMP Connectivity Failed', 'reachabilityStatus': 'Unreachable', 'series': 'Cisco Catalyst 9300 Series Switches', 'snmpContact': '', 'snmpLocation': '', 'associatedWlcIp': '', 'apEthernetMacAddress': None, 'errorCode': 'DEV-UNREACHED', 'errorDescription': 'NCIM12013: SNMP timeouts are occurring with this device. Either the SNMP credentials are not correctly provided to Cisco DNA Center or the device is responding slow and SNMP timeout is low. If it’s a timeout issue, Cisco DNA Center will attempt to progressively adjust the timeout in subsequent collection cycles to get device to managed state. User can also run discovery again only for this device using the discovery feature after adjusting the timeout and SNMP credentials as required. Or user can update the timeout and SNMP credentials as required using update credentials.', 'interfaceCount': '0', 'lineCardCount': '0', 'lineCardId': '', 'managedAtleastOnce': False, 'memorySize': 'NA', 'tagCount': '0', 'tunnelUdpPort': None, 'uptimeSeconds': 39429658, 'waasDeviceMode': None, 'type': 'Cisco Catalyst 9300 Switch', 'location': None, 'role': 'ACCESS', 'instanceUuid': 'f0cb8464-1ce7-4afe-9c0d-a4b0cc5ee84c', 'instanceTenantId': '5e8e896e4d4add00ca2b6487', 'id': 'f0cb8464-1ce7-4afe-9c0d-a4b0cc5ee84c'}], 'version': '1.0'}
+
+
+def print_device_list(device_json):
+    print("{0:42}{1:17}{2:12}{3:18}{4:12}{5:16}{6:15}".
+          format("hostname", "mgmt IP", "serial","platformId", "SW Version", "role", "Uptime"))
+    for device in device_json['response']:
+        uptime = "N/A" if device['upTime'] is None else device['upTime']
+        if device['serialNumber'] is not None and "," in device['serialNumber']:
+            serialPlatformList = zip(device['serialNumber'].split(","), device['platformId'].split(","))
+        else:
+            serialPlatformList = [(device['serialNumber'], device['platformId'])]
+        for (serialNumber, platformId) in serialPlatformList:
+            print("{0:42}{1:17}{2:12}{3:18}{4:12}{5:16}{6:15}".
+                  format(device['hostname'],
+                         device['managementIpAddress'],
+                         serialNumber,
+                         platformId,
+                         device['softwareVersion'],
+                         device['role'], uptime))
